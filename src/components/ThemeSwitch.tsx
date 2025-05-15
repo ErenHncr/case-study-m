@@ -1,5 +1,5 @@
 import type React from "react"
-import { Dropdown } from "antd"
+import { Button, Dropdown } from "antd"
 import { MoonOutlined, SunOutlined } from "@ant-design/icons"
 
 import { useAppDispatch, useAppSelector } from "../app/hooks"
@@ -46,7 +46,12 @@ function ThemeSwitch() {
         },
       }}
     >
-      Temayı Değiştir
+      <Button
+        icon={appTheme === Theme.LIGHT ? <SunOutlined /> : <MoonOutlined />}
+        style={{ width: "100%" }}
+      >
+        Temayı Değiştir
+      </Button>
     </Dropdown>
   )
 }

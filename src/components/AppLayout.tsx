@@ -50,10 +50,11 @@ const AppLayout: React.FC = () => {
         <Menu defaultSelectedKeys={["1"]} mode="inline" items={items} />
         <div
           style={{
+            width: "100%",
             position: "absolute",
             bottom: 0,
             left: 0,
-            padding: "0 4px 16px 4px",
+            padding: "0 12px 16px 12px",
           }}
         >
           <ThemeSwitch />
