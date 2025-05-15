@@ -1,55 +1,31 @@
 import React from "react"
+import { NavLink } from "react-router"
 import {
   Breadcrumb,
   Button,
   Col,
+  Empty,
+  Input,
   message,
   Row,
   Table,
   type TableColumnsType,
   theme,
 } from "antd"
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons"
+import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons"
 
-import { getUsers, selectUsers, type User } from "./usersSlice"
+import {
+  deleteUser,
+  getUsers,
+  selectUserDelete,
+  selectUsers,
+  selectUsersFilterQuery,
+  setUsersFilterQuery,
+  type User,
+} from "./usersSlice"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 
 type UserListDataType = User
-
-const columns: TableColumnsType<UserListDataType> = [
-  { title: "İsim", dataIndex: "name" },
-  { title: "E-posta", dataIndex: "email" },
-  {
-    title: "",
-    width: 180,
-    render: () => {
-      return (
-        <Row gutter={[6, 0]} justify="end">
-          <Col>
-            <Button
-              color="primary"
-              variant="text"
-              icon={<EditOutlined />}
-              style={{ padding: "0 6px" }}
-            >
-              Düzenle
-            </Button>
-          </Col>
-          <Col>
-            <Button
-              color="danger"
-              variant="text"
-              icon={<DeleteOutlined />}
-              style={{ padding: "0 6px" }}
-            >
-              Sil
-            </Button>
-          </Col>
-        </Row>
-      )
-    },
-  },
-]
 
 function UserList() {
   const {
@@ -58,9 +34,65 @@ function UserList() {
   const [messageApi, contextHolder] = message.useMessage()
   const dispatch = useAppDispatch()
   const users = useAppSelector(selectUsers)
+  const usersFilterQuery = useAppSelector(selectUsersFilterQuery)
+  const userDelete = useAppSelector(selectUserDelete)
+
+  const columns: TableColumnsType<UserListDataType> = React.useMemo(
+    () => [
+      { title: "İsim", dataIndex: "name" },
+      { title: "E-posta", dataIndex: "email" },
+      {
+        title: "",
+        width: 140,
+        render: (_, record) => {
+          return (
+            <Row gutter={[6, 0]} justify="end">
+              <Col>
+                <NavLink to={`/users/${String(record.id)}`}>
+                  <Button
+                    color="primary"
+                    variant="text"
+                    icon={<EyeOutlined />}
+                    style={{ padding: "0 6px" }}
+                    title="Görüntüle"
+                  />
+                </NavLink>
+              </Col>
+              <Col>
+                <NavLink to={`/users/${String(record.id)}/edit`}>
+                  <Button
+                    color="primary"
+                    variant="text"
+                    icon={<EditOutlined />}
+                    style={{ padding: "0 6px" }}
+                    title="Düzenle"
+                  />
+                </NavLink>
+              </Col>
+              <Col>
+                <Button
+                  color="danger"
+                  variant="text"
+                  icon={<DeleteOutlined />}
+                  style={{ padding: "0 6px" }}
+                  title="Sil"
+                  onClick={() => {
+                    void dispatch(deleteUser(record.id))
+                  }}
+                />
+              </Col>
+            </Row>
+          )
+        },
+      },
+    ],
+    [dispatch],
+  )
 
   React.useEffect(() => {
-    void dispatch(getUsers())
+    if (!users.isLoading && !users.isSuccess) {
+      void dispatch(getUsers())
+    }
     // eslint-disable-next-line
   }, [])
 
@@ -74,6 +106,31 @@ function UserList() {
     }
   }, [users.isError, messageApi])
 
+  React.useEffect(() => {
+    if (userDelete.isSuccess) {
+      messageApi.open({
+        type: "success",
+        content: "Kullanıcı başarıyla silindi.",
+      })
+    }
+  }, [userDelete.isSuccess, messageApi])
+
+  React.useEffect(() => {
+    if (userDelete.isError) {
+      messageApi.open({
+        type: "error",
+        content:
+          "Kullanıcı silinirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+      })
+    }
+  }, [userDelete.isError, messageApi])
+
+  React.useEffect(() => {
+    return () => {
+      dispatch(setUsersFilterQuery(""))
+    }
+  }, [dispatch])
+
   return (
     <>
       {contextHolder}
@@ -81,11 +138,11 @@ function UserList() {
         style={{ margin: "16px 0" }}
         items={[
           {
-            title: "Ürünler",
-            href: "/products",
+            title: "Kullanıcılar",
+            href: "/users",
           },
         ]}
-      ></Breadcrumb>
+      />
       <div
         style={{
           padding: 24,
@@ -94,12 +151,28 @@ function UserList() {
           borderRadius: borderRadiusLG,
         }}
       >
+        <Row>
+          <Col span={24}>
+            <Input.Search
+              placeholder="Kullanıcı ara"
+              allowClear
+              defaultValue={usersFilterQuery}
+              onSearch={value => {
+                dispatch(setUsersFilterQuery(value))
+              }}
+              style={{ marginBottom: 16, width: "100%", maxWidth: 300 }}
+            />
+          </Col>
+        </Row>
         <Table<UserListDataType>
           rowKey="id"
-          loading={users.isLoading}
+          loading={users.isLoading || userDelete.isLoading}
           columns={columns}
-          dataSource={users.data}
+          dataSource={users.filteredData}
           scroll={{ x: "auto" }}
+          locale={{
+            emptyText: <Empty description="Kullanıcı bulunamadı" />,
+          }}
         />
       </div>
     </>
