@@ -11,10 +11,6 @@ export const axiosMockAdapterInstance = new AxiosMockAdapter(axiosMockInstance, 
   delayResponse: 1000,
 })
 
-axiosMockAdapterInstance.onGet("/users").reply(200, {
-  users: mockUsers,
-})
+axiosMockAdapterInstance.onGet("/users").reply(200, mockUsers)
 
-axiosMockAdapterInstance.onGet("/products").reply(200, {
-  products: mockProducts,
-})
+axiosMockAdapterInstance.onGet("/products").reply(200, mockProducts)

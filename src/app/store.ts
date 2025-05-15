@@ -6,13 +6,14 @@ import storage from "redux-persist/lib/storage"
 import { counterSlice } from "../features/counter/counterSlice"
 import { quotesApiSlice } from "../features/quotes/quotesApiSlice"
 import { themeSlice } from "../features/theme/themeSlice"
+import { usersSlice } from "../features/users/usersSlice"
 
 const persistConfig = {
   key: "root",
   storage,
 }
 
-const rootReducer = combineSlices(counterSlice, quotesApiSlice, themeSlice)
+const rootReducer = combineSlices(counterSlice, quotesApiSlice, themeSlice, usersSlice)
 
 export type RootState = ReturnType<typeof rootReducer>
 

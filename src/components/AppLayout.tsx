@@ -1,8 +1,8 @@
-import type React from "react"
+import React from "react"
 import { ProductOutlined, TeamOutlined } from "@ant-design/icons"
 import type { MenuProps } from "antd"
 import { Layout, Menu, theme } from "antd"
-import { NavLink, Outlet } from "react-router"
+import { NavLink, Outlet, useMatch } from "react-router"
 import ThemeSwitch from "./ThemeSwitch"
 
 const { Content, Sider } = Layout
@@ -37,24 +37,42 @@ const siderStyle: React.CSSProperties = {
   bottom: 0,
   scrollbarWidth: "thin",
   scrollbarGutter: "stable",
+  padding: "8px 4px",
 }
 
 const AppLayout: React.FC = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken()
+  const usersMatch = useMatch("/users")
+  const productsMatch = useMatch("/products")
+
+  const defaultSelectedKeys = React.useMemo(() => {
+    if (usersMatch) {
+      return ["2"]
+    }
+    if (productsMatch) {
+      return ["1"]
+    }
+    return ["1"]
+  }, [usersMatch, productsMatch])
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider style={{ ...siderStyle, background: colorBgContainer }}>
-        <Menu defaultSelectedKeys={["1"]} mode="inline" items={items} />
+        <Menu
+          defaultSelectedKeys={defaultSelectedKeys}
+          mode="inline"
+          items={items}
+          style={{ borderInlineEnd: "unset" }}
+        />
         <div
           style={{
             width: "100%",
             position: "absolute",
             bottom: 0,
             left: 0,
-            padding: "0 12px 16px 12px",
+            padding: "0 8px 16px 8px",
           }}
         >
           <ThemeSwitch />
