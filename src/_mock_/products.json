@@ -1,0 +1,86 @@
+[
+  {
+    "id": 1,
+    "name": "Computer",
+    "description": "High-performance laptop",
+    "price": 11129.99,
+    "category": "Electronics"
+  },
+  {
+    "id": 2,
+    "name": "Smartphone",
+    "description": "Latest model smartphone",
+    "price": 799.99,
+    "category": "Electronics"
+  },
+  {
+    "id": 3,
+    "name": "Headphones",
+    "description": "Noise-cancelling headphones",
+    "price": 299.99,
+    "category": "Electronics"
+  },
+  {
+    "id": 4,
+    "name": "Smartwatch",
+    "description": "Fitness tracking smartwatch",
+    "price": 199.99,
+    "category": "Electronics"
+  },
+  {
+    "id": 5,
+    "name": "Tablet",
+    "description": "Portable tablet with stylus support",
+    "price": 499.99,
+    "category": "Electronics"
+  },
+  {
+    "id": 6,
+    "name": "Camera",
+    "description": "DSLR camera with high resolution",
+    "price": 1299.99,
+    "category": "Electronics"
+  },
+  {
+    "id": 7,
+    "name": "Monitor",
+    "description": "4K Ultra HD monitor",
+    "price": 599.99,
+    "category": "Electronics"
+  },
+  {
+    "id": 8,
+    "name": "Keyboard",
+    "description": "Mechanical keyboard with RGB lighting",
+    "price": 149.99,
+    "category": "Electronics"
+  },
+  {
+    "id": 9,
+    "name": "Mouse",
+    "description": "Wireless gaming mouse",
+    "price": 89.99,
+    "category": "Electronics"
+  },
+  {
+    "id": 10,
+    "name": "Router",
+    "description": "High-speed Wi-Fi router",
+    "price": 129.99,
+    "category": "Electronics"
+  },
+  {
+    "id": 11,
+    "name": "Printer",
+    "description": "All-in-one color printer",
+    "price": 249.99,
+    "category": "Electronics"
+  },
+  {
+    "id": 12,
+    "name": "Speaker",
+    "description": "Bluetooth portable speaker",
+    "price": 99.99,
+    "category": "Electronics"
+  }
+]
