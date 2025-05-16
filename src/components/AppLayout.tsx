@@ -1,9 +1,10 @@
 import React from "react"
-import { ProductOutlined, TeamOutlined } from "@ant-design/icons"
+import { NavLink, Outlet, useMatch } from "react-router"
 import type { MenuProps } from "antd"
 import { Layout, Menu, theme } from "antd"
-import { NavLink, Outlet, useMatch } from "react-router"
-import ThemeSwitch from "./ThemeSwitch"
+import { ProductOutlined, TeamOutlined } from "@ant-design/icons"
+
+import ThemeSwitch from "../features/theme/ThemeSwitch"
 
 const { Content, Sider } = Layout
 

@@ -2,8 +2,8 @@ import type React from "react"
 import { Button, Dropdown } from "antd"
 import { MoonOutlined, SunOutlined } from "@ant-design/icons"
 
-import { useAppDispatch, useAppSelector } from "../app/hooks"
-import { changeTheme, selectTheme, Theme } from "../features/theme/themeSlice"
+import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import { changeTheme, selectTheme, Theme } from "./themeSlice"
 
 const dropdownItemStyle: React.CSSProperties = {
   display: "flex",
