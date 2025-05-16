@@ -125,6 +125,9 @@ export const usersSlice = createAppSlice({
     resetUserUpdate: create.reducer(state => {
       state.updateResponse = initialState.updateResponse
     }),
+    resetUserDelete: create.reducer(state => {
+      state.deleteResponse = initialState.deleteResponse
+    }),
   }),
   extraReducers: builder => {
     builder
@@ -247,8 +250,12 @@ export const usersSlice = createAppSlice({
   },
 })
 
-export const { setUsersFilterQuery, resetUser, resetUserUpdate } =
-  usersSlice.actions
+export const {
+  setUsersFilterQuery,
+  resetUser,
+  resetUserUpdate,
+  resetUserDelete,
+} = usersSlice.actions
 
 export const {
   selectUsers,

@@ -17,6 +17,7 @@ import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons"
 import {
   deleteUser,
   getUsers,
+  resetUserDelete,
   selectUserDelete,
   selectUsers,
   selectUsersFilterQuery,
@@ -128,6 +129,7 @@ function UserList() {
   React.useEffect(() => {
     return () => {
       dispatch(setUsersFilterQuery(""))
+      dispatch(resetUserDelete())
     }
   }, [dispatch])
 
