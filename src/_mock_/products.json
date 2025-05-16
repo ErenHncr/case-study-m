@@ -1,86 +1,93 @@
 [
   {
     "id": 1,
-    "name": "Computer",
-    "description": "High-performance laptop",
-    "price": 11129.99,
-    "category": "Electronics"
+    "name": "Apple MacBook Pro 16",
+    "description": "Yüksek performanslı dizüstü bilgisayar",
+    "price": 131129.99,
+    "category": "Bilgisayar"
   },
   {
     "id": 2,
-    "name": "Smartphone",
-    "description": "Latest model smartphone",
-    "price": 799.99,
-    "category": "Electronics"
+    "name": "Xiaomi 13 Pro",
+    "description": "En son model akıllı telefon",
+    "price": 27799.99,
+    "category": "Telefon"
   },
   {
     "id": 3,
-    "name": "Headphones",
-    "description": "Noise-cancelling headphones",
-    "price": 299.99,
-    "category": "Electronics"
+    "name": "Lenovo ThinkPad X1 Carbon",
+    "description": "İş için tasarlanmış hafif dizüstü bilgisayar",
+    "price": 3299.99,
+    "category": "Bilgisayar"
   },
   {
     "id": 4,
-    "name": "Smartwatch",
-    "description": "Fitness tracking smartwatch",
-    "price": 199.99,
-    "category": "Electronics"
+    "name": "Huawei Watch GT 3",
+    "description": "Akıllı saat",
+    "price": 5199.99,
+    "category": "Akıllı Saat"
   },
   {
     "id": 5,
-    "name": "Tablet",
-    "description": "Portable tablet with stylus support",
-    "price": 499.99,
-    "category": "Electronics"
+    "name": "Samsung Galaxy Tab S8",
+    "description": "Android tablet",
+    "price": 9499.99,
+    "category": "Tablet"
   },
   {
     "id": 6,
-    "name": "Camera",
-    "description": "DSLR camera with high resolution",
-    "price": 1299.99,
-    "category": "Electronics"
+    "name": "Apple Ipad Pro 12.9",
+    "description": "Yüksek çözünürlüklü tablet",
+    "price": 54299.99,
+    "category": "Tablet"
   },
   {
     "id": 7,
-    "name": "Monitor",
-    "description": "4K Ultra HD monitor",
-    "price": 599.99,
-    "category": "Electronics"
+    "name": "ViewSonic VP2785-4K",
+    "description": "4K monitör",
+    "price": 15429.99,
+    "category": "Monitör"
   },
   {
     "id": 8,
-    "name": "Keyboard",
-    "description": "Mechanical keyboard with RGB lighting",
+    "name": "Razer BlackWidow V3",
+    "description": "Mekanik oyun klavyesi",
     "price": 149.99,
-    "category": "Electronics"
+    "category": "Klavye"
   },
   {
     "id": 9,
-    "name": "Mouse",
-    "description": "Wireless gaming mouse",
+    "name": "Logitech G502",
+    "description": "Oyun faresi",
     "price": 89.99,
-    "category": "Electronics"
+    "category": "Fare"
   },
   {
     "id": 10,
-    "name": "Router",
-    "description": "High-speed Wi-Fi router",
-    "price": 129.99,
-    "category": "Electronics"
+    "name": "Huawei MateBook 14",
+    "description": "Dizüstü bilgisayar",
+    "price": 24889.99,
+    "category": "Bilgisayar"
   },
   {
     "id": 11,
-    "name": "Printer",
-    "description": "All-in-one color printer",
-    "price": 249.99,
-    "category": "Electronics"
+    "name": "Redmi Note 11 Pro",
+    "description": "Akıllı telefon",
+    "price": 24889.99,
+    "category": "Telefon"
   },
   {
     "id": 12,
-    "name": "Speaker",
-    "description": "Bluetooth portable speaker",
-    "price": 99.99,
-    "category": "Electronics"
+    "name": "Logitech MX Keys",
+    "description": "Kablosuz klavye",
+    "price": 24889.99,
+    "category": "Klavye"
+  },
+  {
+    "id": 13,
+    "name": "Samsung Galaxy S21",
+    "description": "32GB depolama alanına sahip akıllı telefon",
+    "price": 24889.99,
+    "category": "Telefon"
   }
 ]

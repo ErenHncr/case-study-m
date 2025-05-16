@@ -5,9 +5,12 @@ import {
   getMockProducts,
   getMockUser,
   getMockUsers,
-  getUserIdFromUrl,
+  getIdFromUrl,
+  getMockProduct,
+  getMockProductsCategories,
 } from "../utils/mock"
 import type { User } from "../features/users/usersSlice"
+import type { Product } from "../features/products/productsSlice"
 
 export const axiosMockInstance = axios.create()
 
@@ -20,8 +23,9 @@ export const axiosMockAdapterInstance = new AxiosMockAdapter(
 )
 
 axiosMockAdapterInstance.onGet("/users").reply(200, getMockUsers())
+
 axiosMockAdapterInstance.onGet(/\/users\/\d+/).reply(function (config) {
-  const userId = getUserIdFromUrl(config.url)
+  const userId = getIdFromUrl(config.url)
   if (!userId) {
     return [403, { message: "user id is required" }]
   }
@@ -35,7 +39,7 @@ axiosMockAdapterInstance.onGet(/\/users\/\d+/).reply(function (config) {
 })
 
 axiosMockAdapterInstance.onPatch(/\/users\/\d+/).reply(function (config) {
-  const userId = getUserIdFromUrl(config.url)
+  const userId = getIdFromUrl(config.url)
   if (!userId) {
     return [403, { message: "user id is required" }]
   }
@@ -63,7 +67,7 @@ axiosMockAdapterInstance.onPatch(/\/users\/\d+/).reply(function (config) {
 })
 
 axiosMockAdapterInstance.onDelete(/\/users\/\d+/).reply(function (config) {
-  const userId = getUserIdFromUrl(config.url)
+  const userId = getIdFromUrl(config.url)
   if (!userId) {
     return [403, { message: "user id is required" }]
   }
@@ -77,3 +81,80 @@ axiosMockAdapterInstance.onDelete(/\/users\/\d+/).reply(function (config) {
 })
 
 axiosMockAdapterInstance.onGet("/products").reply(200, getMockProducts())
+
+axiosMockAdapterInstance.onGet(/\/products\/\d+/).reply(function (config) {
+  const productId = getIdFromUrl(config.url)
+  if (!productId) {
+    return [403, { message: "product id is required" }]
+  }
+
+  const product = getMockProduct(productId)
+  if (!product) {
+    return [404, { message: "product not found" }]
+  }
+
+  return [200, product]
+})
+
+axiosMockAdapterInstance.onPost("/products").reply(function (config) {
+  try {
+    const data = config.data as string
+    if (!data || typeof data !== "string") {
+      return [403, { message: "data is required" }]
+    }
+    const dataProduct = JSON.parse(data) as Product | null
+    if (!dataProduct) {
+      return [403, { message: "data is required" }]
+    }
+
+    return [200, dataProduct]
+  } catch {
+    return [403, { message: "data is not valid" }]
+  }
+})
+
+axiosMockAdapterInstance.onPatch(/\/products\/\d+/).reply(function (config) {
+  const productId = getIdFromUrl(config.url)
+  if (!productId) {
+    return [403, { message: "product id is required" }]
+  }
+
+  const product = getMockProduct(productId)
+  if (!product) {
+    return [404, { message: "product not found" }]
+  }
+
+  try {
+    const data = config.data as string
+    if (!data || typeof data !== "string") {
+      return [403, { message: "data is required" }]
+    }
+    const dataProduct = JSON.parse(data) as Partial<Product> | null
+    if (!dataProduct) {
+      return [403, { message: "data is required" }]
+    }
+    const updatedProduct = { ...product, ...dataProduct }
+
+    return [200, updatedProduct]
+  } catch {
+    return [403, { message: "data is not valid" }]
+  }
+})
+
+axiosMockAdapterInstance.onDelete(/\/products\/\d+/).reply(function (config) {
+  const productId = getIdFromUrl(config.url)
+  if (!productId) {
+    return [403, { message: "product id is required" }]
+  }
+
+  const product = getMockProduct(productId)
+  if (!product) {
+    return [404, { message: "product not found" }]
+  }
+
+  return [200, product]
+})
+
+axiosMockAdapterInstance
+  .onGet("/products/categories")
+  .reply(200, getMockProductsCategories())

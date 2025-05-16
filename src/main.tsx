@@ -9,6 +9,7 @@ import { persistor, store } from "./app/store"
 import { App } from "./App"
 import AppLayout from "./components/AppLayout"
 import AppConfigProvider from "./components/ConfigProvider"
+import ProductList from "./features/products/ProductList"
 import UserList from "./features/users/UserList"
 import UserDetail from "./features/users/UserDetail"
 
@@ -27,10 +28,11 @@ if (container) {
             <BrowserRouter>
               <Routes>
                 <Route element={<AppLayout />}>
-                  <Route path="/products" element={<App />} />
+                  <Route path="/products" element={<ProductList />} />
                   <Route path="/users" element={<UserList />} />
                   <Route path="/users/:userId" element={<UserDetail />} />
                   <Route path="/users/:userId/edit" element={<UserDetail />} />
+                  <Route path="/other" element={<App />} />
                   <Route path="*" element={<Navigate to="/products" />} />
                 </Route>
               </Routes>

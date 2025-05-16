@@ -7,13 +7,20 @@ import { counterSlice } from "../features/counter/counterSlice"
 import { quotesApiSlice } from "../features/quotes/quotesApiSlice"
 import { themeSlice } from "../features/theme/themeSlice"
 import { usersSlice } from "../features/users/usersSlice"
+import { productsSlice } from "../features/products/productsSlice"
 
 const persistConfig = {
   key: "root",
   storage,
 }
 
-const rootReducer = combineSlices(counterSlice, quotesApiSlice, themeSlice, usersSlice)
+const rootReducer = combineSlices(
+  counterSlice,
+  quotesApiSlice,
+  themeSlice,
+  usersSlice,
+  productsSlice,
+)
 
 export type RootState = ReturnType<typeof rootReducer>
 
