@@ -77,7 +77,7 @@ function ProductList() {
             <Row gutter={[6, 0]} justify="end">
               <Col>
                 <Button
-                  color="cyan"
+                  color="gold"
                   variant="text"
                   icon={record.isFavorite ? <StarFilled /> : <StarOutlined />}
                   title={
