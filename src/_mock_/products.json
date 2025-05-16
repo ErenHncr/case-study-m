@@ -4,56 +4,64 @@
     "name": "Apple MacBook Pro 16",
     "description": "Yüksek performanslı dizüstü bilgisayar",
     "price": 131129.99,
-    "category": "Bilgisayar"
+    "category": "Bilgisayar",
+    "isFavorite": false
   },
   {
     "id": 2,
     "name": "Xiaomi 13 Pro",
     "description": "En son model akıllı telefon",
     "price": 27799.99,
-    "category": "Telefon"
+    "category": "Telefon",
+    "isFavorite": true
   },
   {
     "id": 3,
     "name": "Lenovo ThinkPad X1 Carbon",
     "description": "İş için tasarlanmış hafif dizüstü bilgisayar",
     "price": 3299.99,
-    "category": "Bilgisayar"
+    "category": "Bilgisayar",
+    "isFavorite": false
   },
   {
     "id": 4,
     "name": "Huawei Watch GT 3",
     "description": "Akıllı saat",
     "price": 5199.99,
-    "category": "Akıllı Saat"
+    "category": "Akıllı Saat",
+    "isFavorite": true
   },
   {
     "id": 5,
     "name": "Samsung Galaxy Tab S8",
     "description": "Android tablet",
     "price": 9499.99,
-    "category": "Tablet"
+    "category": "Tablet",
+    "isFavorite": false
   },
   {
     "id": 6,
     "name": "Apple Ipad Pro 12.9",
     "description": "Yüksek çözünürlüklü tablet",
     "price": 54299.99,
-    "category": "Tablet"
+    "category": "Tablet",
+    "isFavorite": false
   },
   {
     "id": 7,
     "name": "ViewSonic VP2785-4K",
     "description": "4K monitör",
     "price": 15429.99,
-    "category": "Monitör"
+    "category": "Monitör",
+    "isFavorite": false
   },
   {
     "id": 8,
     "name": "Razer BlackWidow V3",
     "description": "Mekanik oyun klavyesi",
     "price": 149.99,
-    "category": "Klavye"
+    "category": "Klavye",
+    "isFavorite": false
   },
   {
     "id": 9,
@@ -67,14 +75,16 @@
     "name": "Huawei MateBook 14",
     "description": "Dizüstü bilgisayar",
     "price": 24889.99,
-    "category": "Bilgisayar"
+    "category": "Bilgisayar",
+    "isFavorite": false
   },
   {
     "id": 11,
     "name": "Redmi Note 11 Pro",
     "description": "Akıllı telefon",
     "price": 24889.99,
-    "category": "Telefon"
+    "category": "Telefon",
+    "isFavorite": false
   },
   {
     "id": 12,
@@ -88,6 +98,7 @@
     "name": "Samsung Galaxy S21",
     "description": "32GB depolama alanına sahip akıllı telefon",
     "price": 24889.99,
-    "category": "Telefon"
+    "category": "Telefon",
+    "isFavorite": false
   }
 ]

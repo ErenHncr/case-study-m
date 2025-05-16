@@ -11,6 +11,7 @@ export type Product = {
   price: number
   description: string
   category: string
+  isFavorite: boolean
 }
 
 export type ProductsSliceState = {

@@ -20,20 +20,21 @@ import {
   EditOutlined,
   EyeOutlined,
   PlusOutlined,
+  StarFilled,
+  StarOutlined,
 } from "@ant-design/icons"
 
 import {
   deleteProduct,
   getProducts,
-  getProductsCategories,
   resetProductDelete,
   selectProductDelete,
   selectProducts,
-  selectProductsCategories,
   setProductsFilter,
   type Product,
 } from "./productsSlice"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import useProductCategoryOptions from "./hooks/useProductCategoryOptions"
 
 type ProductListDataType = Product
 
@@ -46,17 +47,21 @@ function ProductList() {
   const dispatch = useAppDispatch()
   const products = useAppSelector(selectProducts)
   const productDelete = useAppSelector(selectProductDelete)
-  const productsCategories = useAppSelector(selectProductsCategories)
 
-  const productsCategoryOptions = React.useMemo(() => {
-    if (Array.isArray(productsCategories.data)) {
-      return productsCategories.data.map(category => ({
-        value: category,
-        label: category,
-      }))
-    }
-    return []
-  }, [productsCategories.data])
+  const productCategoryOptions = useProductCategoryOptions()
+
+  const toggleFavorite = React.useCallback(
+    (product: Product) => {
+      dispatch({
+        type: "updateProduct/fulfilled",
+        payload: {
+          ...product,
+          isFavorite: !product.isFavorite,
+        },
+      })
+    },
+    [dispatch],
+  )
 
   const columns: TableColumnsType<ProductListDataType> = React.useMemo(
     () => [
@@ -66,17 +71,29 @@ function ProductList() {
       { title: "Açıklama", dataIndex: "description" },
       {
         title: "",
-        width: 140,
+        width: 200,
         render: (_, record) => {
           return (
             <Row gutter={[6, 0]} justify="end">
+              <Col>
+                <Button
+                  color="cyan"
+                  variant="text"
+                  icon={record.isFavorite ? <StarFilled /> : <StarOutlined />}
+                  title={
+                    record.isFavorite ? "Favorilerden çıkar" : "Favorilere ekle"
+                  }
+                  onClick={() => {
+                    toggleFavorite(record)
+                  }}
+                />
+              </Col>
               <Col>
                 <NavLink to={`/products/${String(record.id)}`}>
                   <Button
                     color="primary"
                     variant="text"
                     icon={<EyeOutlined />}
-                    style={{ padding: "0 6px" }}
                     title="Görüntüle"
                   />
                 </NavLink>
@@ -87,7 +104,6 @@ function ProductList() {
                     color="primary"
                     variant="text"
                     icon={<EditOutlined />}
-                    style={{ padding: "0 6px" }}
                     title="Düzenle"
                   />
                 </NavLink>
@@ -97,7 +113,6 @@ function ProductList() {
                   color="danger"
                   variant="text"
                   icon={<DeleteOutlined />}
-                  style={{ padding: "0 6px" }}
                   title="Sil"
                   onClick={() => {
                     modalApi.confirm({
@@ -117,19 +132,12 @@ function ProductList() {
         },
       },
     ],
-    [dispatch, modalApi],
+    [dispatch, modalApi, toggleFavorite],
   )
 
   React.useEffect(() => {
     if (!products.isLoading && !products.isSuccess) {
       void dispatch(getProducts())
-    }
-    // eslint-disable-next-line
-  }, [])
-
-  React.useEffect(() => {
-    if (!productsCategories.isLoading && !productsCategories.isSuccess) {
-      void dispatch(getProductsCategories())
     }
     // eslint-disable-next-line
   }, [])
@@ -207,7 +215,7 @@ function ProductList() {
             showSearch
             allowClear
             placeholder="Kategori seçiniz"
-            options={productsCategoryOptions}
+            options={productCategoryOptions}
             style={{ width: "100%", maxWidth: "300px" }}
             notFoundContent="Kategori bulunamadı"
             onChange={(value: string) => {
