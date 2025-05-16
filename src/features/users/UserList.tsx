@@ -7,6 +7,7 @@ import {
   Empty,
   Input,
   message,
+  Modal,
   Row,
   Table,
   type TableColumnsType,
@@ -32,7 +33,8 @@ function UserList() {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken()
-  const [messageApi, contextHolder] = message.useMessage()
+  const [messageApi, messageContextHolder] = message.useMessage()
+  const [modalApi, modalContextHolder] = Modal.useModal()
   const dispatch = useAppDispatch()
   const users = useAppSelector(selectUsers)
   const usersFilterQuery = useAppSelector(selectUsersFilterQuery)
@@ -78,7 +80,16 @@ function UserList() {
                   style={{ padding: "0 6px" }}
                   title="Sil"
                   onClick={() => {
-                    void dispatch(deleteUser(record.id))
+                    modalApi.confirm({
+                      title: "Kullanıcıyı sil",
+                      content:
+                        "Bu kullanıcıyı silmek istediğinize emin misiniz?",
+                      okText: "Sil",
+                      cancelText: "İptal",
+                      onOk() {
+                        void dispatch(deleteUser(record.id))
+                      },
+                    })
                   }}
                 />
               </Col>
@@ -87,7 +98,7 @@ function UserList() {
         },
       },
     ],
-    [dispatch],
+    [dispatch, modalApi],
   )
 
   React.useEffect(() => {
@@ -135,7 +146,8 @@ function UserList() {
 
   return (
     <>
-      {contextHolder}
+      {messageContextHolder}
+      {modalContextHolder}
       <Breadcrumb
         style={{ margin: "16px 0" }}
         items={[
