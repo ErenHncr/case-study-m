@@ -7,6 +7,7 @@ import {
   Form,
   Input,
   message,
+  Modal,
   Spin,
   theme,
   Typography,
@@ -37,7 +38,8 @@ function UserDetail() {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken()
-  const [messageApi, contextHolder] = message.useMessage()
+  const [messageApi, messageContextHolder] = message.useMessage()
+  const [modalApi, modalContextHolder] = Modal.useModal()
   const navigate = useNavigate()
   const isUserDetailEdit = useMatch("/users/:userId/edit")
   const { userId } = useParams()
@@ -47,9 +49,17 @@ function UserDetail() {
 
   const onFinish = React.useCallback(
     (values: { name: string; email: string }) => {
-      void dispatch(updateUser({ id: Number(userId), ...values }))
+      modalApi.confirm({
+        title: "Kullanıcıyı güncelle",
+        content: "Bu kullanıcıyı güncellemek istediğinize emin misiniz?",
+        okText: "Güncelle",
+        cancelText: "İptal",
+        onOk() {
+          void dispatch(updateUser({ id: Number(userId), ...values }))
+        },
+      })
     },
-    [dispatch, userId],
+    [dispatch, modalApi, userId],
   )
 
   React.useEffect(() => {
@@ -97,7 +107,8 @@ function UserDetail() {
 
   return (
     <>
-      {contextHolder}
+      {messageContextHolder}
+      {modalContextHolder}
       <Breadcrumb
         style={{ margin: "16px 0" }}
         items={[
