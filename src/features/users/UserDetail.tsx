@@ -13,6 +13,7 @@ import {
   Typography,
 } from "antd"
 
+import { formValidateMessages } from "../../lib/antd"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import {
   getUser,
@@ -22,17 +23,6 @@ import {
   selectUserUpdate,
   updateUser,
 } from "./usersSlice"
-
-const validateMessages = {
-  required: "${label} alanı boş bırakılamaz!",
-  types: {
-    email: "${label} geçerli bir e-posta adresi değil!",
-  },
-  string: {
-    min: "${label} en az ${min} karakter olmalıdır!",
-    max: "${label} en fazla ${max} karakter olmalıdır!",
-  },
-}
 
 function UserDetail() {
   const {
@@ -93,8 +83,10 @@ function UserDetail() {
         type: "error",
         content:
           "Kullanıcı yüklerken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+        onClose: () => {
+          void navigate("/users")
+        },
       })
-      void navigate("/users")
     }
   }, [user.isError, messageApi, navigate])
 
@@ -156,7 +148,7 @@ function UserDetail() {
             </Typography.Title>
             <Form
               layout="vertical"
-              validateMessages={validateMessages}
+              validateMessages={formValidateMessages}
               onFinish={onFinish}
               initialValues={{
                 name: user.data?.name,
@@ -203,7 +195,7 @@ function UserDetail() {
                   htmlType="submit"
                   style={{ width: "100%", marginTop: 8 }}
                 >
-                  Submit
+                  Kaydet
                 </Button>
               )}
             </Form>

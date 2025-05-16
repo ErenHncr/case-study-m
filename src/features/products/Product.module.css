@@ -1,0 +1,18 @@
+.m0 {
+  margin: 0 !important;
+}
+
+.productCard {
+  position: relative;
+  padding: 24px;
+  min-height: 228px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.productCardSpinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

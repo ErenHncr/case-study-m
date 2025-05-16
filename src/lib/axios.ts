@@ -8,6 +8,7 @@ import {
   getIdFromUrl,
   getMockProduct,
   getMockProductsCategories,
+  generateId,
 } from "../utils/mock"
 import type { User } from "../features/users/usersSlice"
 import type { Product } from "../features/products/productsSlice"
@@ -102,12 +103,12 @@ axiosMockAdapterInstance.onPost("/products").reply(function (config) {
     if (!data || typeof data !== "string") {
       return [403, { message: "data is required" }]
     }
-    const dataProduct = JSON.parse(data) as Product | null
+    const dataProduct = JSON.parse(data) as Omit<Product, "id"> | null
     if (!dataProduct) {
       return [403, { message: "data is required" }]
     }
 
-    return [200, dataProduct]
+    return [200, { id: generateId(), ...dataProduct }]
   } catch {
     return [403, { message: "data is not valid" }]
   }
@@ -121,7 +122,7 @@ axiosMockAdapterInstance.onPatch(/\/products\/\d+/).reply(function (config) {
 
   const product = getMockProduct(productId)
   if (!product) {
-    return [404, { message: "product not found" }]
+    return [404, { message: "product not found", id: productId }]
   }
 
   try {
@@ -149,7 +150,7 @@ axiosMockAdapterInstance.onDelete(/\/products\/\d+/).reply(function (config) {
 
   const product = getMockProduct(productId)
   if (!product) {
-    return [404, { message: "product not found" }]
+    return [404, { message: "product not found", id: productId }]
   }
 
   return [200, product]

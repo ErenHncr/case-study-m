@@ -1,7 +1,9 @@
+import type { AxiosError } from "axios"
 import { createAsyncThunk } from "@reduxjs/toolkit"
-import { createAppSlice } from "../../app/createAppSlice"
-import { axiosMockInstance } from "../../lib/axios"
+
 import type { ResponseStatus } from "../../utils/types"
+import { axiosMockInstance } from "../../lib/axios"
+import { createAppSlice } from "../../app/createAppSlice"
 
 export type Product = {
   id: number
@@ -21,6 +23,9 @@ export type ProductsSliceState = {
     filteredData: Product[]
   }
   detailResponse: ResponseStatus & {
+    data: Product | null
+  }
+  createResponse: ResponseStatus & {
     data: Product | null
   }
   updateResponse: ResponseStatus & {
@@ -47,6 +52,12 @@ const initialState: ProductsSliceState = {
     filteredData: [],
   },
   detailResponse: {
+    isLoading: false,
+    isSuccess: false,
+    isError: false,
+    data: null,
+  },
+  createResponse: {
     isLoading: false,
     isSuccess: false,
     isError: false,
@@ -81,10 +92,33 @@ export const getProducts = createAsyncThunk("getProducts", async () => {
 
 export const getProduct = createAsyncThunk(
   "getProduct",
-  async (id: Product["id"] | string) => {
-    const response = await axiosMockInstance.get<Product>(
-      `/products/${String(id)}`,
-    )
+  async (id: Product["id"] | string, { rejectWithValue }) => {
+    try {
+      const response = await axiosMockInstance.get<Product>(
+        `/products/${String(id)}`,
+      )
+      const data: Product = response.data
+      return data
+    } catch (err) {
+      const errorStatus = (err as AxiosError).status
+      if (errorStatus === 404) {
+        return rejectWithValue({
+          id: Number(id),
+          status: errorStatus,
+        })
+      }
+
+      return rejectWithValue({
+        status: errorStatus,
+      })
+    }
+  },
+)
+
+export const createProduct = createAsyncThunk(
+  "createProduct",
+  async (product: Omit<Product, "id">) => {
+    const response = await axiosMockInstance.post<Product>("/products", product)
     const data: Product = response.data
     return data
   },
@@ -92,24 +126,53 @@ export const getProduct = createAsyncThunk(
 
 export const updateProduct = createAsyncThunk(
   "updateProduct",
-  async (product: Product) => {
-    const response = await axiosMockInstance.patch<Product>(
-      `/products/${String(product.id)}`,
-      product,
-    )
-    const data: Product = response.data
-    return data
+  async (product: Product, { rejectWithValue }) => {
+    try {
+      const response = await axiosMockInstance.patch<Product>(
+        `/products/${String(product.id)}`,
+        product,
+      )
+      const data: Product = response.data
+      return data
+    } catch (err) {
+      const errorStatus = (err as AxiosError).status
+      if (errorStatus === 404) {
+        return rejectWithValue({
+          id: product.id,
+          data: product,
+          status: errorStatus,
+        })
+      }
+
+      return rejectWithValue({
+        status: errorStatus,
+      })
+    }
   },
 )
 
 export const deleteProduct = createAsyncThunk(
   "deleteProduct",
-  async (id: Product["id"]) => {
-    const response = await axiosMockInstance.delete<Product>(
-      `/products/${String(id)}`,
-    )
-    const data: Product = response.data
-    return data
+  async (id: Product["id"], { rejectWithValue }) => {
+    try {
+      const response = await axiosMockInstance.delete<Product>(
+        `/products/${String(id)}`,
+      )
+      const data: Product = response.data
+      return data
+    } catch (err) {
+      const errorStatus = (err as AxiosError).status
+      if (errorStatus === 404) {
+        return rejectWithValue({
+          id,
+          status: errorStatus,
+        })
+      }
+
+      return rejectWithValue({
+        status: errorStatus,
+      })
+    }
   },
 )
 
@@ -169,6 +232,9 @@ export const productsSlice = createAppSlice({
     resetProduct: create.reducer(state => {
       state.detailResponse = initialState.detailResponse
     }),
+    resetProductCreate: create.reducer(state => {
+      state.createResponse = initialState.createResponse
+    }),
     resetProductUpdate: create.reducer(state => {
       state.updateResponse = initialState.updateResponse
     }),
@@ -208,16 +274,52 @@ export const productsSlice = createAppSlice({
         state.detailResponse.data = null
       })
       .addCase(getProduct.fulfilled, (state, action) => {
+        const data: Product | null =
+          state.listResponse.data.find(
+            (product: Product) => product.id === action.payload.id,
+          ) ?? null
+
         state.detailResponse.isLoading = false
-        state.detailResponse.isSuccess = true
-        state.detailResponse.isError = false
-        state.detailResponse.data = action.payload
+        state.detailResponse.isSuccess = data !== null
+        state.detailResponse.isError = data === null
+        state.detailResponse.data = data
       })
-      .addCase(getProduct.rejected, state => {
+      .addCase(getProduct.rejected, (state, action) => {
+        const payload = action.payload as { id?: number } | undefined
+        const productId = payload?.id
+        const data: Product | null =
+          state.listResponse.data.find(
+            (product: Product) => product.id === productId,
+          ) ?? null
         state.detailResponse.isLoading = false
-        state.detailResponse.isSuccess = false
-        state.detailResponse.isError = true
-        state.detailResponse.data = null
+        state.detailResponse.isSuccess = data !== null
+        state.detailResponse.isError = data === null
+        state.detailResponse.data = data
+      })
+
+    builder
+      .addCase(createProduct.pending, state => {
+        state.createResponse.isLoading = true
+        state.createResponse.isSuccess = false
+        state.createResponse.isError = false
+        state.createResponse.data = null
+      })
+      .addCase(createProduct.fulfilled, (state, action) => {
+        state.createResponse.isLoading = false
+        state.createResponse.isSuccess = true
+        state.createResponse.isError = false
+        state.createResponse.data = action.payload
+        state.listResponse.data = [
+          state.createResponse.data,
+          ...state.listResponse.data,
+        ]
+        state.listResponse.filteredData = state.listResponse.data
+      })
+      .addCase(createProduct.rejected, state => {
+        state.createResponse.isLoading = false
+        state.createResponse.isSuccess = false
+        state.createResponse.isError = true
+        state.createResponse.data = null
       })
 
     builder
@@ -247,11 +349,39 @@ export const productsSlice = createAppSlice({
           state.listResponse.filteredData[filteredProductIndex] = action.payload
         }
       })
-      .addCase(updateProduct.rejected, state => {
+      .addCase(updateProduct.rejected, (state, action) => {
+        const payload = action.payload as
+          | { id?: number; data?: Product }
+          | undefined
+        const productId = payload?.id
+        const productData = payload?.data
+        const data: Product | null =
+          state.listResponse.data.find(
+            (product: Product) => product.id === productId,
+          ) ?? null
+        if (data) {
+          const productIndex = state.listResponse.data.findIndex(
+            product => product.id === productId,
+          )
+          const filteredProductIndex =
+            state.listResponse.filteredData.findIndex(
+              product => product.id === productId,
+            )
+          if (productIndex !== -1) {
+            state.listResponse.data[productIndex] = { ...data, ...productData }
+          }
+          if (filteredProductIndex !== -1) {
+            state.listResponse.filteredData[filteredProductIndex] = {
+              ...data,
+              ...productData,
+            }
+          }
+        }
+
         state.updateResponse.isLoading = false
-        state.updateResponse.isSuccess = false
-        state.updateResponse.isError = true
-        state.updateResponse.data = null
+        state.updateResponse.isSuccess = data !== null
+        state.updateResponse.isError = data === null
+        state.updateResponse.data = data
       })
 
     builder
@@ -281,10 +411,30 @@ export const productsSlice = createAppSlice({
           state.listResponse.filteredData.splice(filteredProductIndex, 1)
         }
       })
-      .addCase(deleteProduct.rejected, state => {
+      .addCase(deleteProduct.rejected, (state, action) => {
+        let productIndex = -1
+        let filteredProductIndex = -1
+        const payload = action.payload as { id?: number } | undefined
+        const productId = payload?.id
+        if (productId) {
+          productIndex = state.listResponse.data.findIndex(
+            product => product.id === productId,
+          )
+          if (productIndex !== -1) {
+            state.listResponse.data.splice(productIndex, 1)
+          }
+
+          filteredProductIndex = state.listResponse.filteredData.findIndex(
+            product => product.id === productId,
+          )
+          if (filteredProductIndex !== -1) {
+            state.listResponse.filteredData.splice(filteredProductIndex, 1)
+          }
+        }
+
         state.deleteResponse.isLoading = false
-        state.deleteResponse.isSuccess = false
-        state.deleteResponse.isError = true
+        state.deleteResponse.isSuccess = productIndex !== -1
+        state.deleteResponse.isError = productIndex === -1
         state.deleteResponse.data = null
       })
 
@@ -311,6 +461,7 @@ export const productsSlice = createAppSlice({
   selectors: {
     selectProducts: products => products.listResponse,
     selectProduct: products => products.detailResponse,
+    selectProductCreate: products => products.createResponse,
     selectProductUpdate: products => products.updateResponse,
     selectProductDelete: products => products.deleteResponse,
     selectProductsCategories: products => products.categoryListResponse,
@@ -320,6 +471,7 @@ export const productsSlice = createAppSlice({
 export const {
   setProductsFilter,
   resetProduct,
+  resetProductCreate,
   resetProductUpdate,
   resetProductDelete,
 } = productsSlice.actions
@@ -327,6 +479,7 @@ export const {
 export const {
   selectProducts,
   selectProduct,
+  selectProductCreate,
   selectProductUpdate,
   selectProductDelete,
   selectProductsCategories,

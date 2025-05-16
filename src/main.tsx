@@ -10,6 +10,9 @@ import { App } from "./App"
 import AppLayout from "./components/AppLayout"
 import AppConfigProvider from "./components/ConfigProvider"
 import ProductList from "./features/products/ProductList"
+import ProductCreate from "./features/products/ProductCreate"
+import ProductEdit from "./features/products/ProductEdit"
+import ProductDetail from "./features/products/ProductDetail"
 import UserList from "./features/users/UserList"
 import UserDetail from "./features/users/UserDetail"
 
@@ -29,6 +32,15 @@ if (container) {
               <Routes>
                 <Route element={<AppLayout />}>
                   <Route path="/products" element={<ProductList />} />
+                  <Route path="/products/add" element={<ProductCreate />} />
+                  <Route
+                    path="/products/:productId/edit"
+                    element={<ProductEdit />}
+                  />
+                  <Route
+                    path="/products/:productId"
+                    element={<ProductDetail />}
+                  />
                   <Route path="/users" element={<UserList />} />
                   <Route path="/users/:userId" element={<UserDetail />} />
                   <Route path="/users/:userId/edit" element={<UserDetail />} />

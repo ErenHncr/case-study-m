@@ -15,7 +15,12 @@ import {
   type TableColumnsType,
   theme,
 } from "antd"
-import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons"
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EyeOutlined,
+  PlusOutlined,
+} from "@ant-design/icons"
 
 import {
   deleteProduct,
@@ -204,6 +209,7 @@ function ProductList() {
             placeholder="Kategori seçiniz"
             options={productsCategoryOptions}
             style={{ width: "100%", maxWidth: "300px" }}
+            notFoundContent="Kategori bulunamadı"
             onChange={(value: string) => {
               dispatch(setProductsFilter({ category: value }))
             }}
@@ -211,6 +217,11 @@ function ProductList() {
               dispatch(setProductsFilter({ category: "" }))
             }}
           />
+          <NavLink to="/products/add" style={{ marginLeft: "auto" }}>
+            <Button variant="solid" color="primary" icon={<PlusOutlined />}>
+              Ürün Ekle
+            </Button>
+          </NavLink>
         </Flex>
         <Table<ProductListDataType>
           rowKey="id"

@@ -1,7 +1,9 @@
+import type { AxiosError } from "axios"
 import { createAsyncThunk } from "@reduxjs/toolkit"
-import { createAppSlice } from "../../app/createAppSlice"
-import { axiosMockInstance } from "../../lib/axios"
+
 import type { ResponseStatus } from "../../utils/types"
+import { axiosMockInstance } from "../../lib/axios"
+import { createAppSlice } from "../../app/createAppSlice"
 
 export type User = {
   id: number
@@ -68,10 +70,24 @@ export const getUsers = createAsyncThunk("getUsers", async () => {
 
 export const getUser = createAsyncThunk(
   "getUser",
-  async (id: User["id"] | string) => {
-    const response = await axiosMockInstance.get<User>(`/users/${String(id)}`)
-    const data: User = response.data
-    return data
+  async (id: User["id"] | string, { rejectWithValue }) => {
+    try {
+      const response = await axiosMockInstance.get<User>(`/users/${String(id)}`)
+      const data: User = response.data
+      return data
+    } catch (err) {
+      const errorStatus = (err as AxiosError).status
+      if (errorStatus === 404) {
+        return rejectWithValue({
+          id: Number(id),
+          status: errorStatus,
+        })
+      }
+
+      return rejectWithValue({
+        status: errorStatus,
+      })
+    }
   },
 )
 
@@ -161,16 +177,27 @@ export const usersSlice = createAppSlice({
         state.detailResponse.data = null
       })
       .addCase(getUser.fulfilled, (state, action) => {
+        const data: User | null =
+          state.listResponse.data.find(
+            (product: User) => product.id === action.payload.id,
+          ) ?? null
+
         state.detailResponse.isLoading = false
-        state.detailResponse.isSuccess = true
-        state.detailResponse.isError = false
-        state.detailResponse.data = action.payload
+        state.detailResponse.isSuccess = data !== null
+        state.detailResponse.isError = data === null
+        state.detailResponse.data = data
       })
-      .addCase(getUser.rejected, state => {
+      .addCase(getUser.rejected, (state, action) => {
+        const payload = action.payload as { id?: number } | undefined
+        const userId = payload?.id
+        const data: User | null =
+          state.listResponse.data.find((user: User) => user.id === userId) ??
+          null
+
         state.detailResponse.isLoading = false
-        state.detailResponse.isSuccess = false
-        state.detailResponse.isError = true
-        state.detailResponse.data = null
+        state.detailResponse.isSuccess = data !== null
+        state.detailResponse.isError = data === null
+        state.detailResponse.data = data
       })
 
     builder

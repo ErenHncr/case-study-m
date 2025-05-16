@@ -3,6 +3,8 @@ import mockProducts from "../_mock_/products.json"
 import type { User } from "../features/users/usersSlice"
 import type { Product } from "../features/products/productsSlice"
 
+export const generateId = (): number => Math.floor(Math.random() * 100001)
+
 export const getIdFromUrl = (url: string | undefined): string | null => {
   const userId = url?.split("/").pop()
   if (!userId) {
