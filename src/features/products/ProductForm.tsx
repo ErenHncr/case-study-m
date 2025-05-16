@@ -1,14 +1,9 @@
-import React from "react"
 import { Button, Flex, Form, Input, InputNumber, Select } from "antd"
 import { UndoOutlined } from "@ant-design/icons"
 
 import { formValidateMessages } from "../../lib/antd"
-import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import {
-  getProductsCategories,
-  selectProductsCategories,
-  type Product,
-} from "./productsSlice"
+import type { Product } from "./productsSlice"
+import useProductCategoryOptions from "./useProductCategoryOptions"
 
 type TProductFormProps = {
   disabled?: boolean
@@ -27,26 +22,8 @@ function ProductForm({
   showUndoBtn = false,
   onSubmit,
 }: TProductFormProps) {
-  const dispatch = useAppDispatch()
-  const productsCategories = useAppSelector(selectProductsCategories)
+  const productCategoryOptions = useProductCategoryOptions()
   const [form] = Form.useForm()
-
-  const productsCategoryOptions = React.useMemo(() => {
-    if (Array.isArray(productsCategories.data)) {
-      return productsCategories.data.map(category => ({
-        value: category,
-        label: category,
-      }))
-    }
-    return []
-  }, [productsCategories.data])
-
-  React.useEffect(() => {
-    if (!productsCategories.isLoading && !productsCategories.isSuccess) {
-      void dispatch(getProductsCategories())
-    }
-    // eslint-disable-next-line
-  }, [])
 
   return (
     <Form
@@ -89,7 +66,7 @@ function ProductForm({
           showSearch
           allowClear
           placeholder="Kategori seçiniz"
-          options={productsCategoryOptions}
+          options={productCategoryOptions}
           notFoundContent="Kategori bulunamadı"
         />
       </Form.Item>

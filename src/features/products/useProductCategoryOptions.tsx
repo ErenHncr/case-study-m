@@ -1,10 +1,10 @@
 import React from "react"
 
-import { useAppDispatch, useAppSelector } from "../../../app/hooks"
+import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import {
   getProductsCategories,
   selectProductsCategories,
-} from "../productsSlice"
+} from "./productsSlice"
 
 function useProductCategoryOptions() {
   const dispatch = useAppDispatch()

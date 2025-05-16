@@ -1,27 +1,46 @@
-# vite-template-redux
+# How to run this project
+## Prerequisites
+- Node.js
+- pnpm
 
-Uses [Vite](https://vitejs.dev/), [Vitest](https://vitest.dev/), and [React Testing Library](https://github.com/testing-library/react-testing-library) to create a modern [React](https://react.dev/) app compatible with [Create React App](https://create-react-app.dev/)
+## Getting Started
+1. Clone the repository
+   ```bash
+   git clone ${REPO_URL}
+   cd ${REPO_NAME}
+   ```
+2. Install dependencies
+   ```bash
+   pnpm install
+   ```
+3. Start the development server
+   ```bash
+   pnpm dev
+   ```
+4. Open your browser and navigate to `http://localhost:5173/`
+5. You can also run the following command to start the server and open the browser automatically
+   ```bash
+   pnpm start
+   ```
+6. To build the project for production, run
+   ```bash
+   pnpm build
+   ```
+7. To preview the production build locally, run
+   ```bash
+   pnpm preview
+   ```
+   Navigate to `http://localhost:4173/` in your browser.
 
-```sh
-npx tiged reduxjs/redux-templates/packages/vite-template-redux my-app
+   
+## Project Structure
+```bash
+├── src
+│   ├── _mock_       
+│   ├── app          
+│   ├── components   
+│   ├── features   
+│   ├── hooks        
+│   ├── lib
+│   ├── utils
 ```
-
-## Goals
-
-- Easy migration from Create React App or Vite
-- As beginner friendly as Create React App
-- Optimized performance compared to Create React App
-- Customizable without ejecting
-
-## Scripts
-
-- `dev`/`start` - start dev server and open browser
-- `build` - build for production
-- `preview` - locally preview production build
-- `test` - launch test runner
-
-## Inspiration
-
-- [Create React App](https://github.com/facebook/create-react-app/tree/main/packages/cra-template)
-- [Vite](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react)
-- [Vitest](https://github.com/vitest-dev/vitest/tree/main/examples/react-testing-lib)

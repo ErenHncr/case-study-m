@@ -34,7 +34,7 @@ import {
   type Product,
 } from "./productsSlice"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import useProductCategoryOptions from "./hooks/useProductCategoryOptions"
+import useProductCategoryOptions from "./useProductCategoryOptions"
 
 type ProductListDataType = Product
 

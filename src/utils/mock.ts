@@ -32,10 +32,13 @@ export const getMockProduct = (productId: string | null): Product | null => {
   if (!productId) {
     return null
   }
-  const product = mockProducts.find(product => product.id === Number(productId))
+  const product = mockProducts.find(
+    product => product.id === Number(productId),
+  ) as Product | null
   if (!product) {
     return null
   }
+
   return product
 }
 
