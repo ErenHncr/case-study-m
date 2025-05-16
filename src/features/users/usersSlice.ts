@@ -3,7 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit"
 
 import type { ResponseStatus } from "../../utils/types"
 import { axiosMockInstance } from "../../lib/axios"
-import { createAppSlice } from "../../app/createAppSlice"
+import { createAppSlice } from "../../lib/redux/createAppSlice"
 
 export type User = {
   id: number

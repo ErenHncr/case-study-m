@@ -3,24 +3,16 @@ import { combineSlices, configureStore } from "@reduxjs/toolkit"
 import { persistStore, persistReducer } from "redux-persist"
 import storage from "redux-persist/lib/storage"
 
-import { counterSlice } from "../features/counter/counterSlice"
-import { quotesApiSlice } from "../features/quotes/quotesApiSlice"
-import { themeSlice } from "../features/theme/themeSlice"
-import { usersSlice } from "../features/users/usersSlice"
-import { productsSlice } from "../features/products/productsSlice"
+import { themeSlice } from "../../features/theme/themeSlice"
+import { usersSlice } from "../../features/users/usersSlice"
+import { productsSlice } from "../../features/products/productsSlice"
 
 const persistConfig = {
   key: "root",
   storage,
 }
 
-const rootReducer = combineSlices(
-  counterSlice,
-  quotesApiSlice,
-  themeSlice,
-  usersSlice,
-  productsSlice,
-)
+const rootReducer = combineSlices(themeSlice, usersSlice, productsSlice)
 
 export type RootState = ReturnType<typeof rootReducer>
 
@@ -34,7 +26,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
       },
-    }).concat(quotesApiSlice.middleware),
+    }),
 })
 
 export const persistor = persistStore(store)

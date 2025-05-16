@@ -2,8 +2,7 @@ import React from "react"
 import { useNavigate, useParams } from "react-router"
 import { Flex, message } from "antd"
 
-import { useAppDispatch, useAppSelector } from "../../app/hooks"
-
+import { useAppDispatch, useAppSelector } from "../../lib/redux/hooks"
 import { getProduct, resetProduct, selectProduct } from "./productsSlice"
 import ProductItem from "./ProductItem"
 import ProductCard from "./ProductCard"

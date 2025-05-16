@@ -1,6 +1,6 @@
 import React from "react"
 
-import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import { useAppDispatch, useAppSelector } from "../../lib/redux/hooks"
 import {
   getProductsCategories,
   selectProductsCategories,

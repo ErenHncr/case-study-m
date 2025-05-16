@@ -14,7 +14,7 @@ import {
 } from "antd"
 
 import { formValidateMessages } from "../../lib/antd"
-import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import { useAppDispatch, useAppSelector } from "../../lib/redux/hooks"
 import {
   getUser,
   resetUser,

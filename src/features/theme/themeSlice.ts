@@ -1,4 +1,4 @@
-import { createAppSlice } from "../../app/createAppSlice"
+import { createAppSlice } from "../../lib/redux/createAppSlice"
 
 export enum Theme {
   LIGHT = "light",

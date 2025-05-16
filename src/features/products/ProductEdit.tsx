@@ -2,8 +2,7 @@ import React from "react"
 import { useNavigate, useParams } from "react-router"
 import { message, Modal } from "antd"
 
-import { useAppDispatch, useAppSelector } from "../../app/hooks"
-
+import { useAppDispatch, useAppSelector } from "../../lib/redux/hooks"
 import {
   type Product,
   getProduct,

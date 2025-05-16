@@ -15,6 +15,7 @@ import {
 } from "antd"
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons"
 
+import { useAppDispatch, useAppSelector } from "../../lib/redux/hooks"
 import {
   deleteUser,
   getUsers,
@@ -25,7 +26,6 @@ import {
   setUsersFilterQuery,
   type User,
 } from "./usersSlice"
-import { useAppDispatch, useAppSelector } from "../../app/hooks"
 
 type UserListDataType = User
 

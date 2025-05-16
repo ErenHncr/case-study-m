@@ -5,8 +5,7 @@ import { Provider } from "react-redux"
 import { PersistGate } from "redux-persist/integration/react"
 import "@ant-design/v5-patch-for-react-19"
 
-import { persistor, store } from "./app/store"
-import { App } from "./App"
+import { persistor, store } from "./lib/redux/store"
 import AppLayout from "./components/AppLayout"
 import AppConfigProvider from "./components/ConfigProvider"
 import ProductList from "./features/products/ProductList"
@@ -44,7 +43,6 @@ if (container) {
                   <Route path="/users" element={<UserList />} />
                   <Route path="/users/:userId" element={<UserDetail />} />
                   <Route path="/users/:userId/edit" element={<UserDetail />} />
-                  <Route path="/other" element={<App />} />
                   <Route path="*" element={<Navigate to="/products" />} />
                 </Route>
               </Routes>

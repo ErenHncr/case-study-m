@@ -24,6 +24,7 @@ import {
   StarOutlined,
 } from "@ant-design/icons"
 
+import { useAppDispatch, useAppSelector } from "../../lib/redux/hooks"
 import {
   deleteProduct,
   getProducts,
@@ -33,7 +34,6 @@ import {
   setProductsFilter,
   type Product,
 } from "./productsSlice"
-import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import useProductCategoryOptions from "./useProductCategoryOptions"
 
 type ProductListDataType = Product

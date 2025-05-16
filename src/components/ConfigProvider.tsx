@@ -1,6 +1,7 @@
 import type React from "react"
 import { ConfigProvider, theme } from "antd"
-import { useAppSelector } from "../app/hooks"
+
+import { useAppSelector } from "../lib/redux/hooks"
 import { selectTheme, Theme } from "../features/theme/themeSlice"
 
 function AppConfigProvider({ children }: { children: React.ReactNode }) {
