@@ -122,6 +122,20 @@ function ProductList() {
                       cancelText: "İptal",
                       onOk() {
                         void dispatch(deleteProduct(record.id))
+                          .unwrap()
+                          .then(() => {
+                            messageApi.open({
+                              type: "success",
+                              content: "Ürün başarıyla silindi.",
+                            })
+                          })
+                          .catch(() => {
+                            messageApi.open({
+                              type: "error",
+                              content:
+                                "Ürün silinirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+                            })
+                          })
                       },
                     })
                   }}
@@ -132,44 +146,23 @@ function ProductList() {
         },
       },
     ],
-    [dispatch, modalApi, toggleFavorite],
+    [dispatch, messageApi, modalApi, toggleFavorite],
   )
 
   React.useEffect(() => {
     if (!products.isLoading && !products.isSuccess) {
       void dispatch(getProducts())
+        .unwrap()
+        .catch(() => {
+          messageApi.open({
+            type: "error",
+            content:
+              "Ürünleri yüklerken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+          })
+        })
     }
     // eslint-disable-next-line
   }, [])
-
-  React.useEffect(() => {
-    if (products.isError) {
-      messageApi.open({
-        type: "error",
-        content:
-          "Ürünleri yüklerken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
-      })
-    }
-  }, [products.isError, messageApi])
-
-  React.useEffect(() => {
-    if (productDelete.isSuccess) {
-      messageApi.open({
-        type: "success",
-        content: "Ürün başarıyla silindi.",
-      })
-    }
-  }, [productDelete.isSuccess, messageApi])
-
-  React.useEffect(() => {
-    if (productDelete.isError) {
-      messageApi.open({
-        type: "error",
-        content:
-          "Ürün silinirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
-      })
-    }
-  }, [productDelete.isError, messageApi])
 
   React.useEffect(() => {
     return () => {

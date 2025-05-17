@@ -23,21 +23,20 @@ function ProductDetail() {
   React.useEffect(() => {
     if (productId) {
       void dispatch(getProduct(productId))
+        .unwrap()
+        .catch(() => {
+          messageApi.open({
+            type: "error",
+            content: errorMessage,
+            duration: 1.5,
+            onClose: () => {
+              void navigate("/products")
+            },
+          })
+        })
     }
-  }, [productId, dispatch])
-
-  React.useEffect(() => {
-    if (product.isError) {
-      messageApi.open({
-        type: "error",
-        content: errorMessage,
-        duration: 1.5,
-        onClose: () => {
-          void navigate("/products")
-        },
-      })
-    }
-  }, [product.isError, messageApi, navigate])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   React.useEffect(() => {
     return () => {

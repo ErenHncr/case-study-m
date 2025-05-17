@@ -37,50 +37,44 @@ function ProductEdit() {
         cancelText: "İptal",
         onOk() {
           void dispatch(updateProduct({ id: Number(productId), ...values }))
+            .unwrap()
+            .then(() => {
+              messageApi.open({
+                type: "success",
+                content: "Ürün başarıyla güncellendi.",
+              })
+            })
+            .catch(() => {
+              messageApi.open({
+                type: "error",
+                content:
+                  "Ürün güncellenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+              })
+            })
         },
       })
     },
-    [dispatch, modalApi, productId],
+    [dispatch, messageApi, modalApi, productId],
   )
 
   React.useEffect(() => {
     if (productId) {
       void dispatch(getProduct(productId))
+        .unwrap()
+        .catch(() => {
+          messageApi.open({
+            type: "error",
+            content:
+              "Ürün yüklenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+            duration: 1.5,
+            onClose: () => {
+              void navigate("/products")
+            },
+          })
+        })
     }
-  }, [productId, dispatch])
-
-  React.useEffect(() => {
-    if (productUpdate.isSuccess) {
-      messageApi.open({
-        type: "success",
-        content: "Ürün başarıyla güncellendi.",
-      })
-    }
-  }, [productUpdate.isSuccess, messageApi])
-
-  React.useEffect(() => {
-    if (productUpdate.isError) {
-      messageApi.open({
-        type: "error",
-        content:
-          "Ürün güncellenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
-      })
-    }
-  }, [productUpdate.isError, messageApi])
-
-  React.useEffect(() => {
-    if (product.isError) {
-      messageApi.open({
-        type: "error",
-        content:
-          "Ürün yüklerken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
-        duration: 1.5,
-        onClose: () => {
-          void navigate("/products")
-        },
-      })
-    }
-  }, [product.isError, messageApi, navigate])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   React.useEffect(() => {
     return () => {

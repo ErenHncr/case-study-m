@@ -32,35 +32,30 @@ function ProductCreate() {
         cancelText: "İptal",
         onOk() {
           void dispatch(createProduct(values))
+            .unwrap()
+            .then(() => {
+              messageApi.open({
+                type: "success",
+                content:
+                  "Ürün başarıyla oluşturuldu. Ürün listesine yönlendiriliyorsunuz.",
+                duration: 1.5,
+                onClose: () => {
+                  void navigate("/products")
+                },
+              })
+            })
+            .catch(() => {
+              messageApi.open({
+                type: "error",
+                content:
+                  "Ürün oluşturulurken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+              })
+            })
         },
       })
     },
-    [dispatch, modalApi],
+    [dispatch, messageApi, modalApi, navigate],
   )
-
-  React.useEffect(() => {
-    if (productCreate.isSuccess) {
-      messageApi.open({
-        type: "success",
-        content:
-          "Ürün başarıyla oluşturuldu. Ürün listesine yönlendiriliyorsunuz.",
-        duration: 1.5,
-        onClose: () => {
-          void navigate("/products")
-        },
-      })
-    }
-  }, [productCreate.isSuccess, messageApi, navigate])
-
-  React.useEffect(() => {
-    if (productCreate.isError) {
-      messageApi.open({
-        type: "error",
-        content:
-          "Ürün oluşturulurken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
-      })
-    }
-  }, [productCreate.isError, messageApi])
 
   React.useEffect(() => {
     return () => {
