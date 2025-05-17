@@ -34,6 +34,7 @@ function ProductCreate() {
           void dispatch(createProduct(values))
             .unwrap()
             .then(() => {
+              dispatch(resetProductCreate())
               messageApi.open({
                 type: "success",
                 content:
