@@ -88,6 +88,20 @@ function UserList() {
                       cancelText: "İptal",
                       onOk() {
                         void dispatch(deleteUser(record.id))
+                          .unwrap()
+                          .then(() => {
+                            messageApi.open({
+                              type: "success",
+                              content: "Kullanıcı başarıyla silindi.",
+                            })
+                          })
+                          .catch(() => {
+                            messageApi.open({
+                              type: "error",
+                              content:
+                                "Kullanıcı silinirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+                            })
+                          })
                       },
                     })
                   }}
@@ -98,44 +112,23 @@ function UserList() {
         },
       },
     ],
-    [dispatch, modalApi],
+    [dispatch, messageApi, modalApi],
   )
 
   React.useEffect(() => {
     if (!users.isLoading && !users.isSuccess) {
       void dispatch(getUsers())
+        .unwrap()
+        .catch(() => {
+          messageApi.open({
+            type: "error",
+            content:
+              "Kullanıcıları yüklerken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+          })
+        })
     }
     // eslint-disable-next-line
   }, [])
-
-  React.useEffect(() => {
-    if (users.isError) {
-      messageApi.open({
-        type: "error",
-        content:
-          "Kullanıcıları yüklerken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
-      })
-    }
-  }, [users.isError, messageApi])
-
-  React.useEffect(() => {
-    if (userDelete.isSuccess) {
-      messageApi.open({
-        type: "success",
-        content: "Kullanıcı başarıyla silindi.",
-      })
-    }
-  }, [userDelete.isSuccess, messageApi])
-
-  React.useEffect(() => {
-    if (userDelete.isError) {
-      messageApi.open({
-        type: "error",
-        content:
-          "Kullanıcı silinirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
-      })
-    }
-  }, [userDelete.isError, messageApi])
 
   React.useEffect(() => {
     return () => {

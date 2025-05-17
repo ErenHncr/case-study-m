@@ -45,50 +45,44 @@ function UserDetail() {
         okText: "Güncelle",
         cancelText: "İptal",
         onOk() {
-          void dispatch(updateUser({ id: Number(userId), ...values }))
+          dispatch(updateUser({ id: Number(userId), ...values }))
+            .unwrap()
+            .then(() => {
+              messageApi.open({
+                type: "success",
+                content: "Kullanıcı başarıyla güncellendi.",
+              })
+            })
+            .catch(() => {
+              messageApi.open({
+                type: "error",
+                content:
+                  "Kullanıcı güncellenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+              })
+            })
         },
       })
     },
-    [dispatch, modalApi, userId],
+    [dispatch, messageApi, modalApi, userId],
   )
 
   React.useEffect(() => {
     if (userId) {
-      void dispatch(getUser(userId))
+      dispatch(getUser(userId))
+        .unwrap()
+        .catch(() => {
+          messageApi.open({
+            type: "error",
+            content:
+              "Kullanıcı yüklerken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+            onClose: () => {
+              void navigate("/users")
+            },
+          })
+        })
     }
-  }, [userId, dispatch])
-
-  React.useEffect(() => {
-    if (userUpdate.isSuccess) {
-      messageApi.open({
-        type: "success",
-        content: "Kullanıcı başarıyla güncellendi.",
-      })
-    }
-  }, [userUpdate.isSuccess, messageApi])
-
-  React.useEffect(() => {
-    if (userUpdate.isError) {
-      messageApi.open({
-        type: "error",
-        content:
-          "Kullanıcı güncellenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
-      })
-    }
-  }, [userUpdate.isError, messageApi])
-
-  React.useEffect(() => {
-    if (user.isError) {
-      messageApi.open({
-        type: "error",
-        content:
-          "Kullanıcı yüklerken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
-        onClose: () => {
-          void navigate("/users")
-        },
-      })
-    }
-  }, [user.isError, messageApi, navigate])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   React.useEffect(() => {
     return () => {
