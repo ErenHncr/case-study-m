@@ -44,12 +44,20 @@ function ProductEdit() {
                 content: "Ürün başarıyla güncellendi.",
               })
             })
-            .catch(() => {
-              messageApi.open({
-                type: "error",
-                content:
-                  "Ürün güncellenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
-              })
+            .catch((err: unknown) => {
+              const errId = (err as { id: string }).id || null
+              if (errId) {
+                messageApi.open({
+                  type: "success",
+                  content: "Ürün başarıyla güncellendi.",
+                })
+              } else {
+                messageApi.open({
+                  type: "error",
+                  content:
+                    "Ürün güncellenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+                })
+              }
             })
         },
       })
@@ -61,16 +69,19 @@ function ProductEdit() {
     if (productId) {
       void dispatch(getProduct(productId))
         .unwrap()
-        .catch(() => {
-          messageApi.open({
-            type: "error",
-            content:
-              "Ürün yüklenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
-            duration: 1.5,
-            onClose: () => {
-              void navigate("/products")
-            },
-          })
+        .catch((err: unknown) => {
+          const errId = (err as { id: string }).id || null
+          if (!errId) {
+            messageApi.open({
+              type: "error",
+              content:
+                "Ürün yüklenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+              duration: 1.5,
+              onClose: () => {
+                void navigate("/products")
+              },
+            })
+          }
         })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

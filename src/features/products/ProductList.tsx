@@ -129,12 +129,20 @@ function ProductList() {
                               content: "Ürün başarıyla silindi.",
                             })
                           })
-                          .catch(() => {
-                            messageApi.open({
-                              type: "error",
-                              content:
-                                "Ürün silinirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
-                            })
+                          .catch((err: unknown) => {
+                            const errId = (err as { id: string }).id || null
+                            if (errId) {
+                              messageApi.open({
+                                type: "success",
+                                content: "Ürün başarıyla silindi.",
+                              })
+                            } else {
+                              messageApi.open({
+                                type: "error",
+                                content:
+                                  "Ürün silinirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+                              })
+                            }
                           })
                       },
                     })

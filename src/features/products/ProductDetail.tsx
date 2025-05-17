@@ -24,15 +24,18 @@ function ProductDetail() {
     if (productId) {
       void dispatch(getProduct(productId))
         .unwrap()
-        .catch(() => {
-          messageApi.open({
-            type: "error",
-            content: errorMessage,
-            duration: 1.5,
-            onClose: () => {
-              void navigate("/products")
-            },
-          })
+        .catch((err: unknown) => {
+          const errId = (err as { id: string }).id || null
+          if (!errId) {
+            messageApi.open({
+              type: "error",
+              content: errorMessage,
+              duration: 1.5,
+              onClose: () => {
+                void navigate("/products")
+              },
+            })
+          }
         })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
