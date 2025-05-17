@@ -75,7 +75,7 @@ export const getProducts = createAsyncThunk("getProducts", async () => {
 
 export const getProduct = createAsyncThunk(
   "getProduct",
-  async (id: Product["id"] | string, { rejectWithValue }) => {
+  async (id: Product["id"] | string, { rejectWithValue, getState }) => {
     try {
       const response = await axiosMockInstance.get<Product>(
         `/products/${String(id)}`,
@@ -83,10 +83,14 @@ export const getProduct = createAsyncThunk(
       const data: Product = response.data
       return data
     } catch (err) {
+      const state = getState() as { products: ProductsSliceState }
+      const selectedProduct = state.products.listResponse.data.find(
+        (product: Product) => product.id === Number(id),
+      )
       const errorStatus = (err as AxiosError).status
-      if (errorStatus === 404) {
+      if (errorStatus === 404 && selectedProduct) {
         return rejectWithValue({
-          id: Number(id),
+          id: selectedProduct.id,
           status: errorStatus,
         })
       }
@@ -109,7 +113,7 @@ export const createProduct = createAsyncThunk(
 
 export const updateProduct = createAsyncThunk(
   "updateProduct",
-  async (product: Product, { rejectWithValue }) => {
+  async (product: Product, { rejectWithValue, getState }) => {
     try {
       const response = await axiosMockInstance.patch<Product>(
         `/products/${String(product.id)}`,
@@ -118,8 +122,12 @@ export const updateProduct = createAsyncThunk(
       const data: Product = response.data
       return data
     } catch (err) {
+      const state = getState() as { products: ProductsSliceState }
+      const selectedProduct = state.products.listResponse.data.find(
+        (_product: Product) => _product.id === product.id,
+      )
       const errorStatus = (err as AxiosError).status
-      if (errorStatus === 404) {
+      if (errorStatus === 404 && selectedProduct) {
         return rejectWithValue({
           id: product.id,
           data: product,
@@ -136,7 +144,7 @@ export const updateProduct = createAsyncThunk(
 
 export const deleteProduct = createAsyncThunk(
   "deleteProduct",
-  async (id: Product["id"], { rejectWithValue }) => {
+  async (id: Product["id"], { rejectWithValue, getState }) => {
     try {
       const response = await axiosMockInstance.delete<Product>(
         `/products/${String(id)}`,
@@ -144,10 +152,14 @@ export const deleteProduct = createAsyncThunk(
       const data: Product = response.data
       return data
     } catch (err) {
+      const state = getState() as { products: ProductsSliceState }
+      const selectedProduct = state.products.listResponse.data.find(
+        (product: Product) => product.id === Number(id),
+      )
       const errorStatus = (err as AxiosError).status
-      if (errorStatus === 404) {
+      if (errorStatus === 404 && selectedProduct) {
         return rejectWithValue({
-          id,
+          id: selectedProduct.id,
           status: errorStatus,
         })
       }
