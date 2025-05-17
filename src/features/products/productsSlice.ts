@@ -14,30 +14,36 @@ export type Product = {
   isFavorite: boolean
 }
 
+type ProductResponse<T> = ResponseStatus & {
+  data: T
+}
+type ProductItemResponse = ProductResponse<Product | null>
+type ProductCategoriesResponse = ProductResponse<Product["category"][]>
+
+const responseStatusInitialState: ResponseStatus = {
+  isLoading: false,
+  isSuccess: false,
+  isError: false,
+}
+
+const productItemResponseInitialState: ProductItemResponse = {
+  ...responseStatusInitialState,
+  data: null,
+}
+
 export type ProductsSliceState = {
   listFilter: {
     query: string
     category: string
   }
-  listResponse: ResponseStatus & {
-    data: Product[]
+  listResponse: ProductResponse<Product[]> & {
     filteredData: Product[]
   }
-  detailResponse: ResponseStatus & {
-    data: Product | null
-  }
-  createResponse: ResponseStatus & {
-    data: Product | null
-  }
-  updateResponse: ResponseStatus & {
-    data: Product | null
-  }
-  deleteResponse: ResponseStatus & {
-    data: Product | null
-  }
-  categoryListResponse: ResponseStatus & {
-    data: Product["category"][]
-  }
+  detailResponse: ProductItemResponse
+  createResponse: ProductItemResponse
+  updateResponse: ProductItemResponse
+  deleteResponse: ProductItemResponse
+  categoryListResponse: ProductCategoriesResponse
 }
 
 const initialState: ProductsSliceState = {
@@ -46,40 +52,16 @@ const initialState: ProductsSliceState = {
     category: "",
   },
   listResponse: {
-    isLoading: false,
-    isSuccess: false,
-    isError: false,
+    ...responseStatusInitialState,
     data: [],
     filteredData: [],
   },
-  detailResponse: {
-    isLoading: false,
-    isSuccess: false,
-    isError: false,
-    data: null,
-  },
-  createResponse: {
-    isLoading: false,
-    isSuccess: false,
-    isError: false,
-    data: null,
-  },
-  updateResponse: {
-    isLoading: false,
-    isSuccess: false,
-    isError: false,
-    data: null,
-  },
-  deleteResponse: {
-    isLoading: false,
-    isSuccess: false,
-    isError: false,
-    data: null,
-  },
+  detailResponse: productItemResponseInitialState,
+  createResponse: productItemResponseInitialState,
+  updateResponse: productItemResponseInitialState,
+  deleteResponse: productItemResponseInitialState,
   categoryListResponse: {
-    isLoading: false,
-    isSuccess: false,
-    isError: false,
+    ...productItemResponseInitialState,
     data: [],
   },
 }
